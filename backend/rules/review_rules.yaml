@@ -1,0 +1,68 @@
+version: 1
+name: 标准合同初审规则
+
+rules:
+  - id: penalty_ratio
+    name: 违约金比例上限
+    description: 违约金比例不得超过合同金额的30%
+    severity: high
+    expect: absent
+    operator: regex
+    pattern: '(?:违约金[^。；\n]{0,30}?(?:3[1-9](?:\.\d+)?|[4-9]\d(?:\.\d+)?|\d{3,}(?:\.\d+)?|30\.\d*[1-9]\d*)\s*%|(?:3[1-9](?:\.\d+)?|[4-9]\d(?:\.\d+)?|\d{3,}(?:\.\d+)?|30\.\d*[1-9]\d*)\s*%[^。；\n]{0,15}?违约金)'
+    evidence_max: 3
+    suggestion: 将违约金比例调整至合同金额的30%以内
+
+  - id: ip_ownership
+    name: 知识产权归属
+    description: 合同应明确约定知识产权（含著作权、专利权、技术成果）的归属
+    severity: high
+    expect: present
+    operator: keyword
+    keywords: [知识产权, 著作权, 专利权, 技术成果归属]
+    match_mode: any
+    llm_fallback: true
+    suggestion: 增加知识产权归属条款
+
+  - id: payment_term
+    name: 付款期限
+    description: 合同应明确付款期限或账期
+    severity: medium
+    expect: present
+    operator: regex
+    pattern: '(?:付款|支付)(?:期限|时间)|账期|(?:收到|开具)发票后\s*\d+\s*(?:个)?(?:工作日|自然日|日|天)(?:内)?'
+    llm_fallback: true
+    suggestion: 明确付款期限或账期
+
+  - id: dispute_resolution
+    name: 争议解决方式
+    description: 合同应约定仲裁、诉讼或管辖法院
+    severity: medium
+    expect: present
+    operator: keyword
+    keywords: [仲裁, 诉讼, 人民法院, 管辖]
+    match_mode: any
+    llm_fallback: true
+    suggestion: 增加争议解决条款
+
+  - id: confidentiality
+    name: 保密义务
+    description: 合同应约定保密义务
+    severity: medium
+    expect: present
+    operator: keyword
+    keywords: [保密, 商业秘密]
+    match_mode: any
+    llm_fallback: true
+    suggestion: 增加保密条款
+
+  - id: auto_renewal
+    name: 自动续约条款
+    description: 自动续约/自动展期条款涉及长期承诺，需人工确认
+    severity: low
+    expect: present
+    operator: keyword
+    keywords: [自动续约, 自动展期, 自动延长, 自动顺延]
+    match_mode: any
+    on_match: manual
+    on_miss: pass
+    suggestion: 自动续约需业务确认为可接受或删除

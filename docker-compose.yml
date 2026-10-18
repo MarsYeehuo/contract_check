@@ -1,0 +1,20 @@
+name: contract-review
+
+services:
+  contract-review:
+    build: .
+    image: contract-review:latest
+    container_name: contract-review
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - contract-review-data:/app/data
+      - ./backend/rules:/app/rules:ro
+      - ./backend/samples:/app/samples:ro
+    restart: unless-stopped
+
+volumes:
+  contract-review-data:

@@ -1,0 +1,18 @@
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+template_key.txt
+data/
+# 设计/说明文档与题目附件不进入代码仓库
+/docs/
+/README.md
+/AI 使用说明.md
+/frontend/README.md
+*.pdf
+node_modules/
+frontend/dist/
+.idea/
+.DS_Store
